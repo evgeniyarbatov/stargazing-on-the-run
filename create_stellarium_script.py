@@ -6,10 +6,12 @@ from dateutil import tz
 
 LOCAL_TZ = 'Asia/Singapore'
 
-def get_loca_time(dt):
+# python3 create_stellarium_script.py data/Morning_Run.gpx 
+
+def get_local_time(dt):
 	local_tz = tz.gettz(LOCAL_TZ)
 	dt = dt.replace(tzinfo=tz.gettz('UTC'))
-	return dt.astimezone(to_zone)
+	return dt.astimezone(tz.gettz(LOCAL_TZ))
 
 def parse_gpx_file(filename):
     gpx_file = open(filename, 'r')
@@ -18,7 +20,7 @@ def parse_gpx_file(filename):
 	    for segment in track.segments:
 	        for point in segment.points:
 	        	print(
-	        		get_loca_time(point.time), 
+	        		get_local_time(point.time), 
 	        		point.latitude, 
 	        		point.longitude, 
 	        		point.elevation
