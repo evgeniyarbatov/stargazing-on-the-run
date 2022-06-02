@@ -50,11 +50,11 @@ class StellariumScript:
     StelMovementMgr.zoomTo(70, 0);
     core.wait(0.5);
 
-	core.setDate(date, "utc");
+	core.setDate(date, "local");
 	core.setObserverLocation(long, lat, 0, 0, "Singapore", "Earth");
 	core.wait(0.5);
 	core.moveToAltAzi(alt, azi)
-	core.wait(0.5);q
+	core.wait(0.5);
 
 	core.setDate('+' + param_dt + ' seconds');
 	core.screenshot(file_prefix);
@@ -63,20 +63,20 @@ class StellariumScript:
     core.quitStellarium();
 	"""
 
-    def __init__(self, args):
-        self.__args = args
+	def __init__(self, args):
+		self.__args = args
 
 	def create_script(self):
 		script = self.__script
-        script = script.replace("$LAT$", self.__args['lat'])
-        script = script.replace("$LONG$", self.__args['long'])
-        script = script.replace("$DATE$", self.__args['date'])
-        script = script.replace("$AZ$", self.__args['az'])
-        script = script.replace("$ALT$", self.__args['alt'])
+		script = script.replace("$LAT$", self.__args['lat'])
+		script = script.replace("$LONG$", self.__args['long'])
+		script = script.replace("$DATE$", self.__args['date'])
+		script = script.replace("$AZ$", self.__args['az'])
+		script = script.replace("$ALT$", self.__args['alt'])
 
 		file = open("script.ssc", "w")
-        file.write(script)
-        file.close()
+		file.write(script)
+		file.close()
 
 def get_local_time(dt):
 	local_tz = tz.gettz(LOCAL_TZ)
@@ -136,9 +136,13 @@ def main(args):
 	points_with_bearing = get_bearing(points)
 
 	script = StellariumScript(dict[
-
+		'lat': points_with_bearing[0][2],
+		'long': points_with_bearing[0][1],
+		'date': points_with_bearing[0][0],
+		'az': points_with_bearing[0][4],
+		'alt': points_with_bearing[0][3],
 	])
-    script.create_script();
+	script.create_script()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
