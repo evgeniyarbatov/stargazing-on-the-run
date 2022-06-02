@@ -7,7 +7,6 @@ import sys
 from dateutil import tz
 
 LOCAL_TZ = 'Asia/Singapore'
-SAMPLE_SIZE = 100
 
 # python3 create_stellarium_script.py data/Morning_Run.gpx 
 
@@ -32,13 +31,14 @@ def parse_gpx_file(filename):
 					point.elevation					
 				))
 
-	sampled_points = random.sample([x for x in points], SAMPLE_SIZE)
-
-	return sampled_points
+	return points
 
 def get_bearing(points):
 	for idx, point in enumerate(points, start=1):
-		previous_point = points[idx-1]
+		# We need to offset since points are very close
+		previous_point = points[
+			idx - random.randint(5, 10)
+		]
 
 		G = pyproj.Geod(ellps='WGS84')
 
