@@ -48,42 +48,34 @@ class StellariumScript:
 		$POINTS$
 	]
 
-    core.setTimeRate(0); 
-    core.setGuiVisible(false);
-    SolarSystem.setFlagPlanets(true);
-    SolarSystem.setMoonScale(6);
-    SolarSystem.setFlagMoonScale(true);
-    SolarSystem.setFontSize(25);
-    
-    StelSkyDrawer.setAbsoluteStarScale(1.5);
-    StelSkyDrawer.setRelativeStarScale(1.65);
-    StarMgr.setFontSize(20);
-    StarMgr.setLabelsAmount(3);
-    ConstellationMgr.setFlagLines(true);
-    ConstellationMgr.setFlagLabels(true);
-    ConstellationMgr.setArtIntensity(0.1);
-    ConstellationMgr.setFlagArt(true);
-    ConstellationMgr.setFlagBoundaries(false);
-    ConstellationMgr.setConstellationLineThickness(3);
-    ConstellationMgr.setFontSize(18);
-
-    LandscapeMgr.setFlagAtmosphere(true);
-    StelMovementMgr.zoomTo(70, 0);
-    core.wait(0.5);
-
 	points.forEach(
 		function(point) {
+			core.setObserverLocation(
+				point.long, 
+				point.lat, 
+				0, 
+				0, 
+				"Singapore", 
+				"Earth"
+			);
+
 			core.setDate(point.date, "local");
-			core.setObserverLocation(point.long, point.lat, 0, 0, "Singapore", "Earth");
-			core.wait(0.5);
+
+			StelMovementMgr.zoomTo(25, 0.01);
+			core.wait(0.01);
+
 			core.moveToAltAzi(point.alt, point.az)
-			core.wait(0.5);
-			core.screenshot("screenshot_");
+			core.wait(0.01);
+
+			core.screenshot(
+				"screenshot_", 
+				false,
+				"/Users/arbatov/Downloads/stellarium_screens",
+				true,
+				"png"
+			);
 		}
 	);
-
-    core.setGuiVisible(true);
-    core.quitStellarium();
 	"""
 
 	def __init__(self, points):
