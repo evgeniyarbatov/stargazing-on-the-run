@@ -28,7 +28,7 @@ class Point:
 		self.az = az
 
 	def __str__(self):
-		return "{0} {1} {2} {3} {4}".format(
+		return "date: '{0}', lat: {1}, lon: {2}, alt: {3}, az: {4}".format(
 			self.time,
 			self.lat,
 			self.lon,
@@ -44,7 +44,9 @@ class StellariumScript:
     // Name: GPX to Stellarium images
     // Description: Convert GPX files to Stellarium images
 
-	param_az = $POINTS$
+	param_az = [
+		$POINTS$
+	]
 
     core.setTimeRate(0); 
     core.setGuiVisible(false);
@@ -71,15 +73,16 @@ class StellariumScript:
     StelMovementMgr.zoomTo(70, 0);
     core.wait(0.5);
 
-	for (i = 0; i < points.length; i++) {
-		core.setDate(date, "local");
-		core.setObserverLocation(long, lat, 0, 0, "Singapore", "Earth");
-		core.wait(0.5);
-		core.moveToAltAzi(alt, azi)
-		core.wait(0.5);
-
-		core.screenshot(file_prefix);
-	}
+	points.forEach(
+		function(point) {
+			core.setDate(point.date, "local");
+			core.setObserverLocation(point.long, point.lat, 0, 0, "Singapore", "Earth");
+			core.wait(0.5);
+			core.moveToAltAzi(point.alt, point.az)
+			core.wait(0.5);
+			core.screenshot("screenshot_");
+		}
+	);
 
     core.setGuiVisible(true);
     core.quitStellarium();
@@ -92,7 +95,7 @@ class StellariumScript:
 		script = self.__script
 		script = script.replace(
 			"$POINTS$", 
-			','.join(str(point) for point in self.points)
+			",\n".join('{ ' + str(point) + ' }' for point in self.points)
 		)
 
 		file = open("script/script.ssc", "w")
