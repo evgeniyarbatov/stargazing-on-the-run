@@ -28,7 +28,7 @@ class Point:
 		self.az = az
 
 	def __str__(self):
-		return "time: {0} lat: {1} lon: {2} alt: {3} az: {4}".format(
+		return "{0} {1} {2} {3} {4}".format(
 			self.time,
 			self.lat,
 			self.lon,
@@ -37,7 +37,6 @@ class Point:
 		)
 
 class StellariumScript:
-	__args = None
 	__script = """
     // Author: Evgeny Arbatov
     // Version: 1.0
@@ -45,11 +44,7 @@ class StellariumScript:
     // Name: GPX to Stellarium images
     // Description: Convert GPX files to Stellarium images
 
-    param_az = $AZ$
-    param_alt = $ALT$
-    param_lat = $LAT$
-    param_long = $LONG$
-    param_date = "$DATE$"
+	param_az = $POINTS$
 
     core.setTimeRate(0); 
     core.setGuiVisible(false);
@@ -76,31 +71,31 @@ class StellariumScript:
     StelMovementMgr.zoomTo(70, 0);
     core.wait(0.5);
 
-	core.setDate(date, "local");
-	core.setObserverLocation(long, lat, 0, 0, "Singapore", "Earth");
-	core.wait(0.5);
-	core.moveToAltAzi(alt, azi)
-	core.wait(0.5);
+	for (i = 0; i < points.length; i++) {
+		core.setDate(date, "local");
+		core.setObserverLocation(long, lat, 0, 0, "Singapore", "Earth");
+		core.wait(0.5);
+		core.moveToAltAzi(alt, azi)
+		core.wait(0.5);
 
-	core.setDate('+' + param_dt + ' seconds');
-	core.screenshot(file_prefix);
+		core.screenshot(file_prefix);
+	}
 
     core.setGuiVisible(true);
     core.quitStellarium();
 	"""
 
-	def __init__(self, args):
-		self.__args = args
+	def __init__(self, points):
+		self.points = points
 
 	def create_script(self):
 		script = self.__script
-		script = script.replace("$LAT$", self.__args['lat'])
-		script = script.replace("$LONG$", self.__args['long'])
-		script = script.replace("$DATE$", self.__args['date'])
-		script = script.replace("$AZ$", self.__args['az'])
-		script = script.replace("$ALT$", self.__args['alt'])
+		script = script.replace(
+			"$POINTS$", 
+			','.join(str(point) for point in self.points)
+		)
 
-		file = open("script.ssc", "w")
+		file = open("script/script.ssc", "w")
 		file.write(script)
 		file.close()
 
@@ -157,14 +152,8 @@ def main(args):
 	points = sample_points(points)
 	get_azimuth(points)
 
-	# script = StellariumScript(dict[
-	# 	'lat': points_with_bearing[0][2],
-	# 	'long': points_with_bearing[0][1],
-	# 	'date': points_with_bearing[0][0],
-	# 	'az': points_with_bearing[0][4],
-	# 	'alt': points_with_bearing[0][3],
-	# ])
-	# script.create_script()
+	script = StellariumScript(points)
+	script.create_script()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
