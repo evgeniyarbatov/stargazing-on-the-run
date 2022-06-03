@@ -10,6 +10,32 @@ LOCAL_TZ = 'Asia/Singapore'
 
 # python3 create_stellarium_script.py data/Morning_Run.gpx 
 
+class Point:
+	def __init__(
+		self, 
+		time,
+		lat,
+		lon,
+		alt
+	):
+		self.time = time
+		self.lat = float(lat)
+		self.lon = float(lon)
+		self.alt = float(alt)
+		self.az = None
+
+	def setAzimuth(self, az):
+		self.az = az
+
+	def __str__(self):
+		return "time: {0} lat: {1} lon: {2} alt: {3} az: {4}".format(
+			self.time,
+			self.lat,
+			self.lon,
+			self.alt,
+			self.az
+		)
+
 class StellariumScript:
 	__args = None
 	__script = """
@@ -92,57 +118,54 @@ def parse_gpx_file(filename):
 	for track in gpx.tracks:
 		for segment in track.segments:
 			for point in segment.points:
-				points.append((
-					get_local_time(point.time), 
-					point.longitude, 
-					point.latitude, 
-					point.elevation					
-				))
+				local_time = get_local_time(point.time)
+
+				points.append(
+					Point(
+						local_time, 
+						point.latitude, 
+						point.longitude, 
+						point.elevation					
+					)
+				)
 
 	return points
 
-def get_bearing(points):
-	points_with_bearing = []
+def sample_points(points):
+	return points[::50]
 
+def get_azimuth(points):
 	for idx, point in enumerate(points, start=1):
-		# We need to offset since points are very close
-		previous_point = points[
-			idx - random.randint(5, 10)
-		]
+		previous_point = points[idx-1]
 
 		G = pyproj.Geod(ellps='WGS84')
-
 		fwd_azimuth = G.inv(
-			float(previous_point[1]),
-			float(previous_point[2]),
-			float(point[1]),
-			float(point[2])
+			previous_point.lon,
+			previous_point.lat,
+			point.lon,
+			point.lat
 		)[0]
-
-		points_with_bearing.append((
-			point[0],
-			point[1],
-			point[2],
-			point[3],
-			fwd_azimuth
-		))
-
-	return points_with_bearing
+		
+		point.setAzimuth(fwd_azimuth)
 
 def main(args):
 	gpx_file = args[0]
 
 	points = parse_gpx_file(gpx_file)
-	points_with_bearing = get_bearing(points)
+	points = sample_points(points)
+	get_azimuth(points)
 
-	script = StellariumScript(dict[
-		'lat': points_with_bearing[0][2],
-		'long': points_with_bearing[0][1],
-		'date': points_with_bearing[0][0],
-		'az': points_with_bearing[0][4],
-		'alt': points_with_bearing[0][3],
-	])
-	script.create_script()
+	for point in points:
+		print(point)
+
+	# script = StellariumScript(dict[
+	# 	'lat': points_with_bearing[0][2],
+	# 	'long': points_with_bearing[0][1],
+	# 	'date': points_with_bearing[0][0],
+	# 	'az': points_with_bearing[0][4],
+	# 	'alt': points_with_bearing[0][3],
+	# ])
+	# script.create_script()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
