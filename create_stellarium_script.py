@@ -61,17 +61,19 @@ class StellariumScript:
 
 			core.setDate(point.date, "local");
 
-			StelMovementMgr.zoomTo(25, 0.01);
+			StelMovementMgr.zoomTo(50, 0);
 			core.wait(0.01);
 
 			core.moveToAltAzi(point.alt, point.az)
 			core.wait(0.01);
 
+			core.setMilkyWayVisible(true);
+
 			core.screenshot(
 				"screenshot_", 
 				false,
 				"/Users/arbatov/Downloads/stellarium_screens",
-				true,
+				false,
 				"png"
 			);
 		}
