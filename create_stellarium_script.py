@@ -44,14 +44,12 @@ class StellariumScript:
     // Name: GPX to Stellarium images
     // Description: Convert GPX files to Stellarium images
 
-	param_az = [
+	points = [
 		$POINTS$
 	]
 
     core.setTimeRate(0); 
     core.setGuiVisible(false);
-    core.setMilkyWayVisible(true);
-    core.setMilkyWayIntensity(4);
     SolarSystem.setFlagPlanets(true);
     SolarSystem.setMoonScale(6);
     SolarSystem.setFlagMoonScale(true);
@@ -120,7 +118,7 @@ def parse_gpx_file(filename):
 
 				points.append(
 					Point(
-						local_time, 
+						local_time.strftime('%Y-%m-%dT%H:%M:%S'), 
 						point.latitude, 
 						point.longitude, 
 						point.elevation					
