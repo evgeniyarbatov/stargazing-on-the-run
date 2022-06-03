@@ -132,11 +132,13 @@ def parse_gpx_file(filename):
 	return points
 
 def sample_points(points):
-	return points[::50]
+	return points[::20]
 
 def get_azimuth(points):
 	for idx, point in enumerate(points, start=1):
-		previous_point = points[idx-1]
+		previous_point = points[
+			idx - random.randint(5, 10)
+		]
 
 		G = pyproj.Geod(ellps='WGS84')
 		fwd_azimuth = G.inv(
@@ -145,7 +147,7 @@ def get_azimuth(points):
 			point.lon,
 			point.lat
 		)[0]
-		
+
 		point.setAzimuth(fwd_azimuth)
 
 def main(args):
@@ -154,9 +156,6 @@ def main(args):
 	points = parse_gpx_file(gpx_file)
 	points = sample_points(points)
 	get_azimuth(points)
-
-	for point in points:
-		print(point)
 
 	# script = StellariumScript(dict[
 	# 	'lat': points_with_bearing[0][2],
