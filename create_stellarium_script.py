@@ -154,7 +154,7 @@ def parse_gpx_file(filename):
 	return points
 
 def sample_points(points):
-	return points[::20]
+	return points[::50]
 
 def set_azimuth(points):
 	G = pyproj.Geod(ellps='WGS84')
