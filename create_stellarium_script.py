@@ -57,6 +57,7 @@ points = [
 ];
 
 core.clear("natural");
+core.setGuiVisible(false);
 
 SpecialMarkersMgr.setFlagCompassMarks(true);
 
