@@ -39,66 +39,66 @@ class Point:
 
 class StellariumScript:
 	__script = """
-	// Author: Evgeny Arbatov
-	// Version: 1.0
-	// License: Public Domain
-	// Name: GPX to Stellarium images
-	// Description: Convert GPX files to Stellarium images
+// Author: Evgeny Arbatov
+// Version: 1.0
+// License: Public Domain
+// Name: GPX to Stellarium images
+// Description: Convert GPX files to Stellarium images
 
-	points = [
-		$POINTS$
-	];
+points = [
+	$POINTS$
+];
 
-	core.clear("natural");
-	core.setGuiVisible(false);
+core.clear("natural");
+core.setGuiVisible(false);
 
-	GridLinesMgr.setFlagEquatorGrid(false);
+GridLinesMgr.setFlagEquatorGrid(false);
 
-	LandscapeMgr.setFlagLandscape(true);
-	LandscapeMgr.setFlagAtmosphere(true);
+LandscapeMgr.setFlagLandscape(true);
+LandscapeMgr.setFlagAtmosphere(true);
 
-	ConstellationMgr.setFlagLines(true);
-	ConstellationMgr.setFlagLabels(true);
-	ConstellationMgr.setFlagArt(true);
+ConstellationMgr.setFlagLines(true);
+ConstellationMgr.setFlagLabels(true);
+ConstellationMgr.setFlagArt(true);
 
-	SolarSystem.setFlagPlanets(true);
-	SolarSystem.setFlagLabels(true);
-	SolarSystem.setFlagOrbits(true);
+SolarSystem.setFlagPlanets(true);
+SolarSystem.setFlagLabels(true);
+SolarSystem.setFlagOrbits(true);
 
-	StarMgr.setFlagStars(true);
-	StarMgr.setFlagLabels(true);
+StarMgr.setFlagStars(true);
+StarMgr.setFlagLabels(true);
 
-	MilkyWay.setFlagShow(true);
+MilkyWay.setFlagShow(true);
 
-	SporadicMeteorMgr.setFlagShow(true);
+SporadicMeteorMgr.setFlagShow(true);
 
-	NebulaMgr.setFlagShow(true);
+NebulaMgr.setFlagShow(true);
 
-	points.forEach(
-		function(point) {
-			core.moveToAltAzi(point.alt, point.az)
-			core.wait(0.01);
+points.forEach(
+	function(point) {
+		core.moveToAltAzi(point.alt, point.az)
+		core.wait(0.01);
 
-			core.setObserverLocation(
-				point.long, 
-				point.lat, 
-				point.alt
-			);
+		core.setObserverLocation(
+			point.long, 
+			point.lat, 
+			point.alt
+		);
 
-			core.setDate(point.date, "local");
+		core.setDate(point.date, "local");
 
-			core.setTimeRate(0);
-			core.wait(1);
+		core.setTimeRate(0);
+		core.wait(1);
 
-			core.screenshot(
-				"screenshot_", 
-				false,
-				"$SCREENSHOT_LOCATION$",
-				false,
-				"png"
-			);
-		}
-	);
+		core.screenshot(
+			"screenshot_", 
+			false,
+			"$SCREENSHOT_LOCATION$",
+			false,
+			"png"
+		);
+	}
+);
 	"""
 
 	def __init__(self, points):
