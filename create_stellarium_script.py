@@ -7,7 +7,7 @@ import sys
 from dateutil import tz
 
 LOCAL_TZ = 'Asia/Singapore'
-SCREENSHOT_LOCATION = '~/Downloads/stellarium_screens'
+SCREENSHOT_LOCATION = '/Users/arbatov/Downloads/stellarium_screens'
 
 # python3 create_stellarium_script.py data/Morning_Run.gpx 
 
