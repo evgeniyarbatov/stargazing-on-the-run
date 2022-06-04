@@ -57,7 +57,8 @@ points = [
 ];
 
 core.clear("natural");
-core.setGuiVisible(false);
+
+SpecialMarkersMgr.setFlagCompassMarks(true);
 
 GridLinesMgr.setFlagEquatorGrid(false);
 
@@ -70,12 +71,12 @@ ConstellationMgr.setFlagArt(true);
 
 SolarSystem.setFlagPlanets(true);
 SolarSystem.setFlagLabels(true);
-SolarSystem.setFlagOrbits(true);
 
 StarMgr.setFlagStars(true);
 StarMgr.setFlagLabels(true);
 
 MilkyWay.setFlagShow(true);
+MilkyWay.setIntensity(5);
 
 SporadicMeteorMgr.setFlagShow(true);
 
