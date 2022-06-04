@@ -20,21 +20,28 @@ class Point:
 		alt
 	):
 		self.time = time
+
 		self.lat = float(lat)
 		self.lon = float(lon)
 		self.alt = float(alt)
+
 		self.az = None
+		self.dist = None
 
 	def setAzimuth(self, az):
 		self.az = az
 
+	def setDistance(self, distance):
+		self.dist = distance
+
 	def __str__(self):
-		return "date: '{0}', lat: {1}, lon: {2}, alt: {3}, az: {4}".format(
+		return "date: '{0}', lat: {1}, lon: {2}, alt: {3}, az: {4}, dist: {5}".format(
 			self.time,
 			self.lat,
 			self.lon,
 			self.alt,
-			self.az
+			self.az,
+			self.dist
 		)
 
 class StellariumScript:
@@ -149,13 +156,14 @@ def parse_gpx_file(filename):
 def sample_points(points):
 	return points[::20]
 
-def get_azimuth(points):
+def set_azimuth(points):
+	G = pyproj.Geod(ellps='WGS84')
+
 	for idx, point in enumerate(points, start=1):
 		previous_point = points[
-			idx - random.randint(5, 10)
+			idx - 2
 		]
 
-		G = pyproj.Geod(ellps='WGS84')
 		fwd_azimuth = G.inv(
 			previous_point.lon,
 			previous_point.lat,
@@ -165,12 +173,31 @@ def get_azimuth(points):
 
 		point.setAzimuth(fwd_azimuth)
 
+def set_distance(points):
+	G = pyproj.Geod(ellps='WGS84')
+
+	for idx, point in enumerate(points, start=1):
+		previous_point = points[
+			idx - 2
+		]
+
+		distance = G.inv(
+			previous_point.lon,
+			previous_point.lat,
+			point.lon,
+			point.lat
+		)[2]
+
+		point.setDistance(distance)
+
 def main(args):
 	gpx_file = args[0]
 
 	points = parse_gpx_file(gpx_file)
 	points = sample_points(points)
-	get_azimuth(points)
+
+	set_azimuth(points)
+	set_distance(points)
 
 	script = StellariumScript(points)
 	script.create_script()
