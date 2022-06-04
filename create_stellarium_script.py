@@ -7,6 +7,7 @@ import sys
 from dateutil import tz
 
 LOCAL_TZ = 'Asia/Singapore'
+SCREENSHOT_LOCATION = '~/Downloads/stellarium_screens'
 
 # python3 create_stellarium_script.py data/Morning_Run.gpx 
 
@@ -38,41 +39,61 @@ class Point:
 
 class StellariumScript:
 	__script = """
-    // Author: Evgeny Arbatov
-    // Version: 1.0
-    // License: Public Domain
-    // Name: GPX to Stellarium images
-    // Description: Convert GPX files to Stellarium images
+	// Author: Evgeny Arbatov
+	// Version: 1.0
+	// License: Public Domain
+	// Name: GPX to Stellarium images
+	// Description: Convert GPX files to Stellarium images
 
 	points = [
 		$POINTS$
-	]
+	];
+
+	core.clear("natural");
+	core.setGuiVisible(false);
+
+	GridLinesMgr.setFlagEquatorGrid(false);
+
+	LandscapeMgr.setFlagLandscape(true);
+	LandscapeMgr.setFlagAtmosphere(true);
+
+	ConstellationMgr.setFlagLines(true);
+	ConstellationMgr.setFlagLabels(true);
+	ConstellationMgr.setFlagArt(true);
+
+	SolarSystem.setFlagPlanets(true);
+	SolarSystem.setFlagLabels(true);
+	SolarSystem.setFlagOrbits(true);
+
+	StarMgr.setFlagStars(true);
+	StarMgr.setFlagLabels(true);
+
+	MilkyWay.setFlagShow(true);
+
+	SporadicMeteorMgr.setFlagShow(true);
+
+	NebulaMgr.setFlagShow(true);
 
 	points.forEach(
 		function(point) {
+			core.moveToAltAzi(point.alt, point.az)
+			core.wait(0.01);
+
 			core.setObserverLocation(
 				point.long, 
 				point.lat, 
-				0, 
-				0, 
-				"Singapore", 
-				"Earth"
+				point.alt
 			);
 
 			core.setDate(point.date, "local");
 
-			StelMovementMgr.zoomTo(50, 0);
-			core.wait(0.01);
-
-			core.moveToAltAzi(point.alt, point.az)
-			core.wait(0.01);
-
-			core.setMilkyWayVisible(true);
+			core.setTimeRate(0);
+			core.wait(1);
 
 			core.screenshot(
 				"screenshot_", 
 				false,
-				"/Users/arbatov/Downloads/stellarium_screens",
+				"$SCREENSHOT_LOCATION$",
 				false,
 				"png"
 			);
@@ -88,6 +109,10 @@ class StellariumScript:
 		script = script.replace(
 			"$POINTS$", 
 			",\n".join('{ ' + str(point) + ' }' for point in self.points)
+		)
+		script = script.replace(
+			"$SCREENSHOT_LOCATION$", 
+			SCREENSHOT_LOCATION
 		)
 
 		file = open("script/script.ssc", "w")
