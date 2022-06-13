@@ -1,9 +1,16 @@
 #!/usr/bin/python
 
-import random
 import gpxpy
 import pyproj
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+import random
 import sys	
+import glob
+import os
+
 from dateutil import tz
 
 LOCAL_TZ = 'Asia/Singapore'
@@ -43,6 +50,14 @@ class Point:
 			self.az,
 			self.dist
 		)
+
+	def to_dict(self):
+		return {
+			'date': self.time,
+			'lat': self.lat,
+			'lon': self.lon,
+			'az': self.az,
+		}
 
 class StellariumScript:
 	__script = """
@@ -128,6 +143,11 @@ points.forEach(
 		file.write(script)
 		file.close()
 
+def cleanup_images():
+	image_list = glob.glob(os.path.join("images/", "*.png"))
+	for image_path in image_list:
+		os.remove(image_path)
+
 def get_local_time(dt):
 	local_tz = tz.gettz(LOCAL_TZ)
 	dt = dt.replace(tzinfo=tz.gettz('UTC'))
@@ -192,8 +212,20 @@ def set_distance(points):
 
 		point.setDistance(distance)
 
+def plot_run(points_df):
+	for index, point in points_df.iterrows():
+		fig, ax = plt.subplots(figsize = (8,7))
+
+		ax.scatter(point['lon'], point['lat'], zorder=1, alpha=1, c='r', s=60, marker='o')
+		ax.plot(points_df['lon'], points_df['lat'])
+
+		fig.savefig('images/location_'+ point['date'] +'.png') 
+		plt.close(fig) 
+
 def main(args):
 	gpx_file = args[0]
+
+	cleanup_images()
 
 	points = parse_gpx_file(gpx_file)
 	points = sample_points(points)
@@ -203,6 +235,12 @@ def main(args):
 
 	script = StellariumScript(points)
 	script.create_script()
+
+	points_df = pd.DataFrame.from_records([
+		p.to_dict() for p in points
+	])
+
+	plot_run(points_df)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
