@@ -5,6 +5,8 @@ import pyproj
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
+from numpy import pi
 
 import random
 import sys	
@@ -212,12 +214,35 @@ def set_distance(points):
 
 		point.setDistance(distance)
 
-def plot_run(points_df):
-	for index, point in points_df.iterrows():
-		fig, ax = plt.subplots(figsize = (8,7))
+def plot_run(points):
+	points_df = pd.DataFrame.from_records([
+		p.to_dict() for p in points
+	])
 
-		ax.scatter(point['lon'], point['lat'], zorder=1, alpha=1, c='r', s=60, marker='o')
-		ax.plot(points_df['lon'], points_df['lat'])
+	compass_data = pd.DataFrame({
+		'value': [0, 1, 0, 0, 0, 0, 0, 0],
+		'bearing': range(0, 360, 45),
+		'compass': ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+	})
+	compass_data.index = compass_data['bearing'] * 2*pi / 360
+
+	for index, point in points_df.iterrows():
+		fig = plt.figure(figsize=(8, 4))
+
+		gs = GridSpec(nrows=1, ncols=2, width_ratios=[1, 1])
+		
+		ax1 = fig.add_subplot(gs[0, 0])
+		
+		ax1.scatter(point['lon'], point['lat'], zorder=1, alpha=1, c='r', s=60, marker='o')
+		ax1.plot(points_df['lon'], points_df['lat'])
+
+		ax2 = fig.add_subplot(gs[0, 1], projection='polar')
+
+		ax2.set_theta_zero_location('N')
+		ax2.set_theta_direction(-1)
+		ax2.bar(x=compass_data.index, height=compass_data['value'], width=pi/4)
+		ax2.set_xticklabels(compass_data.compass)
+		ax2.set_rgrids([])
 
 		fig.savefig('images/location_'+ point['date'] +'.png') 
 		plt.close(fig) 
@@ -236,11 +261,7 @@ def main(args):
 	script = StellariumScript(points)
 	script.create_script()
 
-	points_df = pd.DataFrame.from_records([
-		p.to_dict() for p in points
-	])
-
-	plot_run(points_df)
+	plot_run(points)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
