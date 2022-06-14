@@ -12,6 +12,7 @@ import random
 import sys	
 import glob
 import os
+import subprocess
 
 from dateutil import tz
 
@@ -149,6 +150,8 @@ def cleanup_images():
 	image_list = glob.glob(os.path.join("images/", "*.png"))
 	for image_path in image_list:
 		os.remove(image_path)
+		subprocess.run(["git", "rm", image_path])
+	os.makedirs("images", exist_ok=True)
 
 def get_local_time(dt):
 	local_tz = tz.gettz(LOCAL_TZ)
