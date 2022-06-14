@@ -24,12 +24,14 @@ SCREENSHOT_LOCATION = '/Users/arbatov/gitRepo/stargazing-on-the-run/sky_maps'
 class Point:
 	def __init__(
 		self, 
-		time,
+		date,
+		timestamp,
 		lat,
 		lon,
 		alt
 	):
-		self.time = time
+		self.date = date
+		self.timestamp = timestamp
 
 		self.lat = float(lat)
 		self.lon = float(lon)
@@ -45,8 +47,9 @@ class Point:
 		self.dist = distance
 
 	def __str__(self):
-		return "date: '{0}', lat: {1}, lon: {2}, alt: {3}, az: {4}, dist: {5}".format(
-			self.time,
+		return "date: '{0}', timestamp: {1}, lat: {2}, lon: {3}, alt: {4}, az: {5}, dist: {6}".format(
+			self.date,
+			self.timestamp,
 			self.lat,
 			self.lon,
 			self.alt,
@@ -56,7 +59,8 @@ class Point:
 
 	def to_dict(self):
 		return {
-			'date': self.time,
+			'date': self.date,
+			'timestamp': self.timestamp,
 			'lat': self.lat,
 			'lon': self.lon,
 			'az': self.az,
@@ -118,7 +122,7 @@ points.forEach(
 		core.wait(1);
 
 		core.screenshot(
-			"stellarium_" + point.date, 
+			"stellarium_" + point.timestamp, 
 			false,
 			"$SCREENSHOT_LOCATION$",
 			false,
@@ -172,6 +176,7 @@ def parse_gpx_file(filename):
 				points.append(
 					Point(
 						local_time.strftime('%Y-%m-%dT%H:%M:%S'), 
+						local_time.strftime('%s'), 
 						point.latitude, 
 						point.longitude, 
 						point.elevation					
@@ -255,7 +260,7 @@ def plot_run(points):
 		ax2.set_xticklabels(compass_data.compass)
 		ax2.set_rgrids([])
 
-		fig.savefig('images/location_'+ point['date'] +'.png') 
+		fig.savefig('images/location_'+ point['timestamp'] +'.png') 
 		plt.close(fig) 
 
 def main(args):
