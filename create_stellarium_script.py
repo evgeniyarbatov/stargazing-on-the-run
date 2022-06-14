@@ -16,7 +16,7 @@ import os
 from dateutil import tz
 
 LOCAL_TZ = 'Asia/Singapore'
-SCREENSHOT_LOCATION = '/Users/arbatov/Downloads/stellarium_screens'
+SCREENSHOT_LOCATION = '/Users/arbatov/gitRepo/stargazing-on-the-run/sky_maps'
 
 # python3 create_stellarium_script.py data/Morning_Run.gpx 
 
@@ -117,7 +117,7 @@ points.forEach(
 		core.wait(1);
 
 		core.screenshot(
-			"screenshot_", 
+			"stellarium_" + point.date, 
 			false,
 			"$SCREENSHOT_LOCATION$",
 			false,

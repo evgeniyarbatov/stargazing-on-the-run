@@ -153,9 +153,9 @@ points.forEach(
 		core.wait(1);
 
 		core.screenshot(
-			"screenshot_", 
+			"stellarium_" + point.date, 
 			false,
-			"/Users/arbatov/Downloads/stellarium_screens",
+			"/Users/arbatov/gitRepo/stargazing-on-the-run/sky_maps",
 			false,
 			"png"
 		);
