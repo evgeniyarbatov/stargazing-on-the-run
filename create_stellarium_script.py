@@ -195,6 +195,9 @@ def set_azimuth(points):
 			point.lat
 		)[0]
 
+		if fwd_azimuth < 0:
+			fwd_azimuth += 360
+
 		point.setAzimuth(fwd_azimuth)
 
 def set_distance(points):
@@ -214,30 +217,35 @@ def set_distance(points):
 
 		point.setDistance(distance)
 
-def plot_run(points):
-	points_df = pd.DataFrame.from_records([
-		p.to_dict() for p in points
-	])
+def get_compass_data(degrees):
+	values = [0, 0, 0, 0, 0, 0, 0, 0]
+	values[int(degrees / 45)] = 1
 
 	compass_data = pd.DataFrame({
-		'value': [0, 1, 0, 0, 0, 0, 0, 0],
+		'value': values,
 		'bearing': range(0, 360, 45),
 		'compass': ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
 	})
 	compass_data.index = compass_data['bearing'] * 2*pi / 360
 
-	for index, point in points_df.iterrows():
-		fig = plt.figure(figsize=(8, 4))
+	return compass_data
 
+def plot_run(points):
+	points_df = pd.DataFrame.from_records([
+		p.to_dict() for p in points
+	])
+
+	for index, point in points_df.iterrows():
+		compass_data = get_compass_data(point['az'])
+
+		fig = plt.figure(figsize=(8, 4))
 		gs = GridSpec(nrows=1, ncols=2, width_ratios=[1, 1])
 		
 		ax1 = fig.add_subplot(gs[0, 0])
-		
 		ax1.scatter(point['lon'], point['lat'], zorder=1, alpha=1, c='r', s=60, marker='o')
 		ax1.plot(points_df['lon'], points_df['lat'])
 
 		ax2 = fig.add_subplot(gs[0, 1], projection='polar')
-
 		ax2.set_theta_zero_location('N')
 		ax2.set_theta_direction(-1)
 		ax2.bar(x=compass_data.index, height=compass_data['value'], width=pi/4)
