@@ -81,6 +81,8 @@ points = [
 core.clear("natural");
 core.setGuiVisible(false);
 
+StelMovementMgr.zoomTo(40, 1);
+
 GridLinesMgr.setFlagEquatorGrid(false);
 
 LandscapeMgr.setFlagLandscape(true);
@@ -128,6 +130,8 @@ points.forEach(
 		);
 	}
 );
+
+core.quitStellarium();
 	"""
 
 	def __init__(self, points):
