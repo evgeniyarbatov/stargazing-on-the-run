@@ -17,12 +17,22 @@ def main(args):
 
         im1 = Image.open(sky_map_file)
         im2 = Image.open(map_file)
-        im1.paste(im2)
+
+        position = ((im1.width - im2.width), (im1.height - im2.height))
+        im1.paste(
+            im2, 
+            position,
+        )
 
         im1.save(
             'combined_maps/result_' + timestamp + '.png', 
             quality=95
         )
+
+        im1.close()
+        im2.close()
+
+        break
 
 if __name__ == "__main__":
     main(sys.argv[1:])
