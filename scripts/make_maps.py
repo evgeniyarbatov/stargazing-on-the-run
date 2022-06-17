@@ -14,12 +14,14 @@ import sys
 
 # python3 make_maps.py data/Morning_Run.gpx 
 
+MAPS_DIR = 'tmp/map_images/'
+
 def cleanup_images():
-	image_list = glob.glob(os.path.join("images/", "*.png"))
+	image_list = glob.glob(os.path.join(MAPS_DIR, "*.png"))
 	for image_path in image_list:
 		os.remove(image_path)
 		subprocess.run(["git", "rm", image_path])
-	os.makedirs("images", exist_ok=True)
+	os.makedirs(MAPS_DIR, exist_ok=True)
 
 def get_compass_data(degrees):
 	values = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -56,7 +58,7 @@ def plot_run(points):
 		ax2.set_xticklabels(compass_data.compass)
 		ax2.set_rgrids([])
 
-		fig.savefig('images/location_'+ point['timestamp'] +'.png') 
+		fig.savefig(MAPS_DIR + 'map_'+ point['timestamp'] +'.png') 
 		plt.close(fig) 
 
 def main(args):
