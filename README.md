@@ -1,10 +1,10 @@
 # Stargazing on the Run
 
-Plotting images of stars and planets to learn about what I have seen in the sky during my early morning runs. It's rare that I get to spot something bright in the sky but when I do, I do not have any way to record my location or figure out where I am looking at. Luckily, I always carry my GPS watch with me. This is a collection of scripts I have used to plot my location on the map and plot the stars in the sky with Stellarium.
+Plotting images of stars and planets to learn about what I could have seen in the sky during my early morning runs. It's rare that I get to spot something bright in the sky. When I do, I do not have any way to remember exactly where I was. Luckily, I always carry my GPS watch with me. This is a collection of scripts I have used to plot my location on the map and plot the stars in the sky with Stellarium.
 
 ## How to use
 
-I use Stellarium to generate images of the sky. Stellarium supports scripting which means I can specify the time / location / bearing and take a screenshot. The first step is to create generate Stellarium script for a given GPX file:
+I use Stellarium to generate images of the sky. With Stellarium scripts I can specify the time / location / bearing and take a screenshot. The first step is to create generate Stellarium script for a given GPX file:
 
 ```
 python3 \
