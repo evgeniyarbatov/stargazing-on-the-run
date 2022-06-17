@@ -62,7 +62,7 @@ points.forEach(
 		core.wait(1);
 
 		core.screenshot(
-			"stellarium_" + point.timestamp, 
+			"sky_" + point.timestamp, 
 			false,
 			"$SCREENSHOT_DIR$",
 			false,
