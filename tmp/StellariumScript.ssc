@@ -155,7 +155,7 @@ points.forEach(
 		core.screenshot(
 			"stellarium_" + point.timestamp, 
 			false,
-			"/Users/arbatov/gitRepo/stargazing-on-the-run/sky_maps",
+			"/Users/arbatov/gitRepo/stargazing-on-the-run/tmp/sky_images",
 			false,
 			"png"
 		);
