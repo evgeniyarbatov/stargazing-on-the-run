@@ -25,7 +25,7 @@ StelMovementMgr.zoomTo(180, 1);
 
 GridLinesMgr.setFlagEquatorGrid(false);
 
-LandscapeMgr.setFlagLandscape(true);
+LandscapeMgr.setFlagLandscape(false);
 LandscapeMgr.setFlagAtmosphere(true);
 
 ConstellationMgr.setFlagLines(true);
