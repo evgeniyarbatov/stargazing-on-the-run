@@ -112,7 +112,7 @@ points = [
 core.clear("natural");
 core.setGuiVisible(false);
 
-StelMovementMgr.zoomTo(40, 1);
+StelMovementMgr.zoomTo(180, 1);
 
 GridLinesMgr.setFlagEquatorGrid(false);
 
@@ -153,11 +153,11 @@ points.forEach(
 		core.wait(1);
 
 		core.screenshot(
-			"stellarium_" + point.timestamp, 
+			"sky_" + point.timestamp, 
 			false,
 			"/Users/arbatov/gitRepo/stargazing-on-the-run/tmp/sky_images",
-			false,
-			"png"
+			true,
+			"jpeg"
 		);
 	}
 );

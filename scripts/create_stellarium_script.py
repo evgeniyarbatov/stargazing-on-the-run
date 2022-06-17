@@ -21,7 +21,7 @@ points = [
 core.clear("natural");
 core.setGuiVisible(false);
 
-StelMovementMgr.zoomTo(40, 1);
+StelMovementMgr.zoomTo(180, 1);
 
 GridLinesMgr.setFlagEquatorGrid(false);
 
@@ -65,8 +65,8 @@ points.forEach(
 			"sky_" + point.timestamp, 
 			false,
 			"$SCREENSHOT_DIR$",
-			false,
-			"png"
+			true,
+			"jpeg"
 		);
 	}
 );
