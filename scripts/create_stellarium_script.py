@@ -7,9 +7,7 @@ import sys
 # python3 create_stellarium_script.py data/Morning_Run.gpx 
 
 class StellariumScript:
-	SCREENSHOT_LOCATION = '/Users/arbatov/gitRepo/stargazing-on-the-run/sky_maps'
-
-	__script = """
+	SCRIPT = """
 // Author: Evgeny Arbatov
 // Version: 1.0
 // License: Public Domain
@@ -66,7 +64,7 @@ points.forEach(
 		core.screenshot(
 			"stellarium_" + point.timestamp, 
 			false,
-			"$SCREENSHOT_LOCATION$",
+			"$SCREENSHOT_DIR$",
 			false,
 			"png"
 		);
@@ -76,26 +74,33 @@ points.forEach(
 core.quitStellarium();
 	"""
 
-	def __init__(self, points):
+	def __init__(
+		self, 
+		points,
+		screenshot_dir
+	):
 		self.points = points
+		self.screenshot_dir = screenshot_dir
 
 	def create_script(self):
-		script = self.__script
+		script = self.SCRIPT
+
 		script = script.replace(
 			"$POINTS$", 
 			",\n".join('{ ' + str(point) + ' }' for point in self.points)
 		)
 		script = script.replace(
-			"$SCREENSHOT_LOCATION$", 
-			StellariumScript.SCREENSHOT_LOCATION
+			"$SCREENSHOT_DIR$", 
+			self.screenshot_dir
 		)
 
-		file = open("script/script.ssc", "w")
+		file = open("tmp/StellariumScript.ssc", "w")
 		file.write(script)
 		file.close()
 
 def main(args):
 	gpx_file = args[0]
+	screenshot_dir = args[1]
 
 	gpx_data = GPXData(gpx_file)
 
@@ -103,7 +108,8 @@ def main(args):
 	gpx_data.set_azimuth()
 
 	script = StellariumScript(
-		gpx_data.get_points()
+		gpx_data.get_points(),
+		screenshot_dir,
 	)
 	script.create_script()
 	
