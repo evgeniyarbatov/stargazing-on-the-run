@@ -18,6 +18,20 @@ points = [
 	$POINTS$
 ];
 
+SolarSystem.setFlagPlanets(true);
+
+SolarSystem.setFlagLabels(true);
+SolarSystem.setLabelsAmount(10);
+
+SolarSystem.setMoonScale(true);
+SolarSystem.setFlagMoonScale(20);
+
+SolarSystem.setFlagMinorBodyScale(true);
+SolarSystem.setMinorBodyScale(20);
+
+SolarSystem.setFlagPlanetScale(true);
+SolarSystem.setPlanetScale(20);
+
 core.clear("natural");
 core.setGuiVisible(false);
 
@@ -31,9 +45,6 @@ LandscapeMgr.setFlagAtmosphere(true);
 ConstellationMgr.setFlagLines(true);
 ConstellationMgr.setFlagLabels(true);
 ConstellationMgr.setFlagArt(true);
-
-SolarSystem.setFlagPlanets(true);
-SolarSystem.setFlagLabels(true);
 
 StarMgr.setFlagStars(true);
 StarMgr.setFlagLabels(true);

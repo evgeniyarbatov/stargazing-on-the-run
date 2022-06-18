@@ -109,6 +109,20 @@ points = [
 { date: '2022-05-29T08:03:29', timestamp: 1653811409, lat: 1.309415, lon: 103.89445, alt: 3.2, az: 85.3440953937461 }
 ];
 
+SolarSystem.setFlagPlanets(true);
+
+SolarSystem.setFlagLabels(true);
+SolarSystem.setLabelsAmount(10);
+
+SolarSystem.setMoonScale(true);
+SolarSystem.setFlagMoonScale(20);
+
+SolarSystem.setFlagMinorBodyScale(true);
+SolarSystem.setMinorBodyScale(20);
+
+SolarSystem.setFlagPlanetScale(true);
+SolarSystem.setPlanetScale(20);
+
 core.clear("natural");
 core.setGuiVisible(false);
 
@@ -122,9 +136,6 @@ LandscapeMgr.setFlagAtmosphere(true);
 ConstellationMgr.setFlagLines(true);
 ConstellationMgr.setFlagLabels(true);
 ConstellationMgr.setFlagArt(true);
-
-SolarSystem.setFlagPlanets(true);
-SolarSystem.setFlagLabels(true);
 
 StarMgr.setFlagStars(true);
 StarMgr.setFlagLabels(true);
