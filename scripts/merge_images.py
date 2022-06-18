@@ -30,22 +30,24 @@ def main(args):
 
         sky_file = [s for s in sky_files if timestamp in s][0]
 
-        im1 = Image.open(sky_file)
-        im2 = Image.open(map_file)
+        with open(sky_file, 'rb') as s, open(map_file, 'rb') as m:
+            im1 = Image.open(s)
+            im2 = Image.open(m)
 
-        position = ((im1.width - im2.width), (im1.height - im2.height))
-        im1.paste(
-            im2, 
-            position,
-        )
+            position = ((im1.width - im2.width), (im1.height - im2.height))
+            im1.paste(
+                im2, 
+                position,
+            )
 
-        im1.save(
-            SKY_MAP_DIR + 'sky_map_' + timestamp + '.png', 
-            quality=50
-        )
+            im1.save(
+                SKY_MAP_DIR + 'sky_map_' + timestamp + '.png', 
+                optimize=True,
+                quality=95
+            )
 
-        im1.close()
-        im2.close()
+            im1.close()
+            im2.close()
 
         break
 
