@@ -28,3 +28,10 @@ Run Stellarium script to create screenshots:
 --startup-script /Users/arbatov/gitRepo/stargazing-on-the-run/tmp/StellariumScript.ssc \
 --screenshot-dir /Users/arbatov/gitRepo/stargazing-on-the-run/tmp/sky_images
 ```
+
+Merge Stellarium screenshots and maps into a single image:
+
+```
+python3 \
+scripts/merge_images.py
+```

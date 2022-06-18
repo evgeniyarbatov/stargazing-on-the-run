@@ -5,17 +5,32 @@ import glob
 import os
 import re
 
-def main(args):
-    maps_files = glob.glob(os.path.join("images/", "*.png"))
-    sky_maps_files = glob.glob(os.path.join("sky_maps/", "*.png"))
+import subprocess
 
-    for map_file in maps_files:
-        m = re.search('_(.+?).png', map_file)
+MAPS_DIR = 'tmp/map_images/'
+SKY_DIR = 'tmp/sky_images/'
+SKY_MAP_DIR = 'tmp/sky_and_map_images/'
+
+def cleanup_images():
+	image_list = glob.glob(os.path.join(SKY_MAP_DIR, "*.png"))
+	for image_path in image_list:
+		os.remove(image_path)
+		subprocess.run(["git", "rm", image_path])
+	os.makedirs(SKY_MAP_DIR, exist_ok=True)
+
+def main(args):
+    cleanup_images()
+
+    map_files = glob.glob(os.path.join(MAPS_DIR, "*.png"))
+    sky_files = glob.glob(os.path.join(SKY_DIR, "*.jpeg"))
+
+    for map_file in map_files:
+        m = re.search('images/map_(.+?).png', map_file)
         timestamp = m.group(1)
 
-        sky_map_file = [s for s in sky_maps_files if timestamp in s][0]
+        sky_file = [s for s in sky_files if timestamp in s][0]
 
-        im1 = Image.open(sky_map_file)
+        im1 = Image.open(sky_file)
         im2 = Image.open(map_file)
 
         position = ((im1.width - im2.width), (im1.height - im2.height))
@@ -25,8 +40,8 @@ def main(args):
         )
 
         im1.save(
-            'combined_maps/result_' + timestamp + '.png', 
-            quality=95
+            SKY_MAP_DIR + 'sky_map_' + timestamp + '.png', 
+            quality=50
         )
 
         im1.close()
