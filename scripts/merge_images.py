@@ -49,7 +49,8 @@ def main(args):
             im1.close()
             im2.close()
 
-        break
+            del im1
+            del im2
 
 if __name__ == "__main__":
     main(sys.argv[1:])
