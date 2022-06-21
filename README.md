@@ -35,3 +35,15 @@ Merge Stellarium screenshots and maps into a single image:
 python3 \
 scripts/merge_images.py
 ```
+
+Create video
+
+```
+cd tmp/sky_and_map_images
+ffmpeg \
+-framerate 5 \
+-pattern_type glob -i '*.png' \
+-c:v libx264 \
+-pix_fmt yuv420p \
+../video/sky_video.mp4
+```
