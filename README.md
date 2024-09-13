@@ -1,6 +1,6 @@
 # Stargazing on the Run
 
-I have used Stellarium scripts to render stars and planets based on GPX file location and my direction.
+Stellarium scripts to render stars and planets based on GPX file location and direction.
 
 ## How to use
 
@@ -30,7 +30,7 @@ Create Stellarium screenshots:
 make screenshots
 ```
 
-Create images with the map:
+Create maps to show location adn direction:
 
 ```
 make maps
