@@ -45,5 +45,11 @@ make merge
 Create videos:
 
 ```
-make videos
+ffmpeg \
+-framerate 1 \
+-pattern_type glob -i '*.png' \
+-c:v libx264 \
+-pix_fmt yuv420p \
+-filter:v "setpts=5.0*PTS" \
+video.mp4
 ```
