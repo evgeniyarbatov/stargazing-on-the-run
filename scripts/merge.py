@@ -1,47 +1,57 @@
-from PIL import Image
-
 import sys	
 import glob
 import os
 import re
+import shutil
 
-MAPS_DIR = 'tmp/map_images/'
-SKY_DIR = 'tmp/sky_images/'
-SKY_MAP_DIR = 'tmp/sky_and_map_images/'
+from PIL import Image
 
-def main(args):
-    cleanup_images()
+def main(
+	gpx_dir,
+	screenshot_dir,
+	maps_dir,
+	output_dir,
+):
+	if os.path.exists(output_dir):
+		shutil.rmtree(output_dir)
 
-    map_files = glob.glob(os.path.join(MAPS_DIR, "*.png"))
-    sky_files = glob.glob(os.path.join(SKY_DIR, "*.jpeg"))
+	gpx_files = glob.glob(
+		os.path.join(gpx_dir, '*.gpx'),
+	)
+	for gpx_file in gpx_files:
+		filename = os.path.splitext(os.path.basename(gpx_file))[0]    
 
-    for map_file in map_files:
-        m = re.search('images/map_(.+?).png', map_file)
-        timestamp = m.group(1)
+		output_path = f"{output_dir}/{filename}"
+		os.makedirs(output_path)
 
-        sky_file = [s for s in sky_files if timestamp in s][0]
+		map_files = glob.glob(os.path.join(f"{maps_dir}/{filename}", "*.png"))
+		screenshot_files = glob.glob(os.path.join(f"{screenshot_dir}/{filename}", "*.jpeg"))
 
-        with open(sky_file, 'rb') as s, open(map_file, 'rb') as m:
-            im1 = Image.open(s)
-            im2 = Image.open(m)
+		for map_file in map_files:
+			timestamp = os.path.splitext(os.path.basename(map_file))[0] 
+			screenshot_file = [s for s in screenshot_files if timestamp in s][0]
 
-            position = ((im1.width - im2.width), (im1.height - im2.height))
-            im1.paste(
-                im2, 
-                position,
-            )
+			with open(screenshot_file, 'rb') as s, open(map_file, 'rb') as m:
+				im1 = Image.open(s)
+				im2 = Image.open(m)
 
-            im1.save(
-                SKY_MAP_DIR + 'sky_map_' + timestamp + '.png', 
-                optimize=True,
-                quality=95
-            )
+				position = ((im1.width - im2.width), (im1.height - im2.height))
+				im1.paste(
+					im2, 
+					position,
+				)
 
-            im1.close()
-            im2.close()
+				im1.save(
+					f'{output_path}/{timestamp}.png',
+					optimize=True,
+					quality=95
+				)
 
-            del im1
-            del im2
+				im1.close()
+				im2.close()
+
+				del im1
+				del im2
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(*sys.argv[1:])

@@ -6,8 +6,10 @@ VENV_PATH = ~/.venv/$(PROJECT_NAME)
 
 GPX_DIR = gpx
 STELLARIUM_SCRIPTS_DIR = stellarium-scripts
+
 SCREENSHOT_DIR = ~/Downloads/stellarium
 MAPS_DIR = ~/Downloads/stellarium-maps
+MERGED_DIR = ~/Downloads/stellarium-with-maps
 
 TIMEZONE = Asia/Ho_Chi_Minh
 
@@ -62,7 +64,9 @@ maps:
 merge:
 	@source $(VENV_PATH)/bin/activate && \
 	python3 scripts/merge.py \
+	$(GPX_DIR) \
 	$(SCREENSHOT_DIR) \
-	$(MAPS_DIR)
+	$(MAPS_DIR) \
+	$(MERGED_DIR)
 
 .PHONY: venv install jupyter gpx scripts screenshots maps merge

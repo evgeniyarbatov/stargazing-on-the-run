@@ -37,7 +37,11 @@ def plot_run(
 	for _, point in points_df.iterrows():
 		compass_data = get_compass_data(point['az'])
 
-		fig = plt.figure(figsize=(8, 4), facecolor='none')
+		fig = plt.figure(
+      		figsize=(8, 4), 
+        	facecolor='none',
+			dpi=300,
+        )
 		gs = GridSpec(nrows=1, ncols=2, width_ratios=[1, 1])
 		
 		ax1 = fig.add_subplot(gs[0, 0])
