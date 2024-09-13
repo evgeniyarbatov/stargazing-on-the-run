@@ -5,18 +5,9 @@ import glob
 import os
 import re
 
-import subprocess
-
 MAPS_DIR = 'tmp/map_images/'
 SKY_DIR = 'tmp/sky_images/'
 SKY_MAP_DIR = 'tmp/sky_and_map_images/'
-
-def cleanup_images():
-	image_list = glob.glob(os.path.join(SKY_MAP_DIR, "*.png"))
-	for image_path in image_list:
-		os.remove(image_path)
-		subprocess.run(["git", "rm", image_path])
-	os.makedirs(SKY_MAP_DIR, exist_ok=True)
 
 def main(args):
     cleanup_images()

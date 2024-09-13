@@ -59,4 +59,10 @@ maps:
 	$(TIMEZONE) \
 	$(MAPS_DIR)
 
-.PHONY: venv install jupyter gpx scripts screenshots maps
+merge:
+	@source $(VENV_PATH)/bin/activate && \
+	python3 scripts/merge.py \
+	$(SCREENSHOT_DIR) \
+	$(MAPS_DIR)
+
+.PHONY: venv install jupyter gpx scripts screenshots maps merge

@@ -1,7 +1,6 @@
 import gpxpy
 import pytz
-
-import xml.etree.ElementTree as ET
+import pyproj
 
 class Point:
 	def __init__(
@@ -44,22 +43,29 @@ class GPXData:
 			gpx = gpxpy.parse(gpx_file)
    
 		gpx.simplify()
-
-		compass_data = self.get_compass(filename)
-
+  
 		for track in gpx.tracks:
 			for segment in track.segments:
-				for point in segment.points:
+				for idx, point in enumerate(segment.points[1:]):
+					previous_point = segment.points[
+						idx - 1
+      				]
+
+					G = pyproj.Geod(ellps='WGS84')
+					fwd_azimuth = G.inv(
+						previous_point.longitude,
+						previous_point.latitude,
+						point.longitude,
+						point.latitude
+					)[0]
+					if fwd_azimuth < 0:
+						fwd_azimuth += 360
+        
 					dt = point.time.replace(
 						tzinfo=pytz.UTC
 					)
 					local_time = dt.astimezone(
 						pytz.timezone(timezone)
-					)
-
-					az = self.get_compass_reading(
-						compass_data, 
-						point.time,
 					)
 
 					self.points.append(
@@ -68,32 +74,9 @@ class GPXData:
 							local_time.strftime('%s'), 
 							point.latitude, 
 							point.longitude,
-							az,
+							fwd_azimuth,
 						)
 					)
-
-	def get_compass(self, filename):
-		compass_data = {}
-     
-		root = ET.parse(filename).getroot()
-		for trk in root.findall('.//{http://www.topografix.com/GPX/1/1}trk'):
-			for trkseg in trk.findall('{http://www.topografix.com/GPX/1/1}trkseg'):
-				for trkpt in trkseg.findall('{http://www.topografix.com/GPX/1/1}trkpt'):
-					time = trkpt.find('{http://www.topografix.com/GPX/1/1}time')
-					time = time.text if time is not None else None
-					
-					extensions = trkpt.find('{http://www.topografix.com/GPX/1/1}extensions')
-					if extensions is not None:
-						compass = extensions.find('{http://www.topografix.com/GPX/1/1}compass')
-						compass = float(compass.text) if compass is not None else None
-
-						compass_data[time] = float(compass)
-						
-		return compass_data
-
-	def get_compass_reading(self, compass_data, time):
-		time = time.strftime('%Y-%m-%dT%H:%M:%SZ')
-		return compass_data[time]
 
 	def get_points(self):
 		return self.points	

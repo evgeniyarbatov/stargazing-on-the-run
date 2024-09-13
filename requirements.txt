@@ -4,3 +4,5 @@ gpxpy
 matplotlib
 numpy
 contextily
+pillow
+pyproj

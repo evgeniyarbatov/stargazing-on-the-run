@@ -33,9 +33,7 @@ make screenshots
 Create images with 1) map of the entire map 2) my current location on the map and 3) direction of where I am looking at:
 
 ```
-python3 \
-scripts/make_maps.py \
-gpx_data/Morning_Run.gpx
+make maps
 ```
 
 Merge Stellarium screenshots and maps into a single image:
