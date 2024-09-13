@@ -1,1 +1,0 @@
-- what I can see from my own window. use compass measurements to get exact sky segment
