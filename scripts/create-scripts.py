@@ -21,19 +21,22 @@ LandscapeMgr.setFlagAtmosphere(false);
 SolarSystem.setFlagLabels(true);
 SolarSystem.setLabelsAmount(10);
 
-SolarSystem.setMoonScale(true);
-SolarSystem.setFlagMoonScale(20);
+SolarSystem.setMoonScale(20);
+SolarSystem.setFlagMoonScale(false);
 
-SolarSystem.setFlagMinorBodyScale(true);
+SolarSystem.setFlagMinorBodyScale(false);
 SolarSystem.setMinorBodyScale(20);
 
-SolarSystem.setFlagPlanetScale(true);
+SolarSystem.setFlagPlanetScale(false);
 SolarSystem.setPlanetScale(20);
 
 StarMgr.setFlagStars(true);
 StarMgr.setFlagLabels(true);
 
 MilkyWay.setFlagShow(true);
+
+ConstellationMgr.setFlagLabels(true);
+ConstellationMgr.setFlagLines(true);
 
 points.forEach(
 	function(point) { 
