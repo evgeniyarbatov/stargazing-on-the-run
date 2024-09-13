@@ -23,6 +23,15 @@ class Point:
 	def __str__(self):
 		return f"date: '{self.date}', timestamp: {self.timestamp}, lat: {self.lat}, lon: {self.lon}, az: {self.az}"
 
+	def to_dict(self):
+		return {
+			'date': self.date,
+			'timestamp': self.timestamp,
+			'lat': self.lat,
+			'lon': self.lon,
+			'az': self.az,
+		}
+
 class GPXData:
 	def __init__(
 		self,

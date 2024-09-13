@@ -7,6 +7,7 @@ VENV_PATH = ~/.venv/$(PROJECT_NAME)
 GPX_DIR = gpx
 STELLARIUM_SCRIPTS_DIR = stellarium-scripts
 SCREENSHOT_DIR = ~/Downloads/stellarium
+MAPS_DIR = ~/Downloads/stellarium-maps
 
 TIMEZONE = Asia/Ho_Chi_Minh
 
@@ -51,4 +52,11 @@ screenshots:
 		/Applications/Stellarium.app/Contents/MacOS/stellarium --startup-script $$script_path; \
 	done
 
-.PHONY: venv install jupyter gpx scripts screenshots
+maps:
+	@source $(VENV_PATH)/bin/activate && \
+	python3 scripts/make-maps.py \
+	$(GPX_DIR) \
+	$(TIMEZONE) \
+	$(MAPS_DIR)
+
+.PHONY: venv install jupyter gpx scripts screenshots maps
