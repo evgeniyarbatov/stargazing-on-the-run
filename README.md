@@ -1,7 +1,5 @@
 # Stargazing on the Run
 
-Plotting images of stars and planets to learn about what I could have seen in the sky during my early morning and late night runs. 
-
 I have used Stellarium scripts to render stars and planets based on GPX file location and my direction.
 
 ## How to use
