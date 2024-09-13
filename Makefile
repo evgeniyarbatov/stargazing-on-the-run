@@ -5,6 +5,10 @@ PROJECT_NAME := $(shell basename $(PWD))
 VENV_PATH = ~/.venv/$(PROJECT_NAME)
 
 GPX_DIR = gpx
+STELLARIUM_SCRIPTS_DIR = stellarium-scripts
+SCREENSHOT_DIR = ~/Downloads/stellarium
+
+TIMEZONE = Asia/Ho_Chi_Minh
 
 all: venv install jupyter
 
@@ -31,4 +35,12 @@ gpx:
 
 	@gdown --folder https://drive.google.com/drive/folders/$(GPX_FOLDER_ID) -O $(GPX_DIR)
 
-.PHONY: venv install jupyter gpx
+scripts:
+	@source $(VENV_PATH)/bin/activate && \
+	python3 scripts/create-scripts.py \
+	$(GPX_DIR) \
+	$(TIMEZONE) \
+	$(STELLARIUM_SCRIPTS_DIR) \
+	$(SCREENSHOT_DIR)
+
+.PHONY: venv install jupyter gpx scripts

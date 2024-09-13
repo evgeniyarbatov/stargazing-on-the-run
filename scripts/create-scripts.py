@@ -1,10 +1,9 @@
-#!/usr/bin/python
+import glob
+import sys
+import os
+import shutil
 
 from utils import GPXData
-
-import sys	
-
-# python3 create_stellarium_script.py data/Morning_Run.gpx 
 
 class StellariumScript:
 	SCRIPT = """
@@ -15,7 +14,7 @@ class StellariumScript:
 // Description: Convert GPX files to Stellarium images
 
 points = [
-	$POINTS$
+$POINTS$
 ];
 
 SolarSystem.setFlagPlanets(true);
@@ -58,13 +57,13 @@ NebulaMgr.setFlagShow(true);
 
 points.forEach(
 	function(point) {
-		core.moveToAltAzi(point.alt, point.az)
+		core.moveToAltAzi(0, point.az)
 		core.wait(0.01);
 
 		core.setObserverLocation(
 			point.long, 
 			point.lat, 
-			point.alt
+			0
 		);
 
 		core.setDate(point.date, "local");
@@ -73,7 +72,7 @@ points.forEach(
 		core.wait(1);
 
 		core.screenshot(
-			"sky_" + point.timestamp, 
+			point.timestamp, 
 			false,
 			"$SCREENSHOT_DIR$",
 			true,
@@ -93,7 +92,7 @@ core.quitStellarium();
 		self.points = points
 		self.screenshot_dir = screenshot_dir
 
-	def create_script(self):
+	def create_script(self, filename):
 		script = self.SCRIPT
 
 		script = script.replace(
@@ -105,24 +104,38 @@ core.quitStellarium();
 			self.screenshot_dir
 		)
 
-		file = open("tmp/StellariumScript.ssc", "w")
+		file = open(filename, "w")
 		file.write(script)
 		file.close()
 
-def main(args):
-	gpx_file = args[0]
-	screenshot_dir = args[1]
+def main(
+    gpx_dir, 
+    timezone,
+    stellarium_dir,
+    screenshot_dir,
+):
+	if os.path.exists(screenshot_dir):
+		shutil.rmtree(screenshot_dir)
+    
+	gpx_files = glob.glob(
+		os.path.join(gpx_dir, '*.gpx'),
+    )
+	for gpx_file in gpx_files:
+		filename = os.path.splitext(os.path.basename(gpx_file))[0]
 
-	gpx_data = GPXData(gpx_file)
+		gpx_data = GPXData(gpx_file, timezone)
+		points = gpx_data.get_points()
 
-	gpx_data.sample_points()
-	gpx_data.set_azimuth()
+		screenshot_path = f"{screenshot_dir}/{filename}"
+		os.makedirs(screenshot_path)
 
-	script = StellariumScript(
-		gpx_data.get_points(),
-		screenshot_dir,
-	)
-	script.create_script()
+		script = StellariumScript(
+			points,
+			screenshot_path,
+		)
+		script.create_script(
+			f"{stellarium_dir}/{filename}.ssc"
+		)
 	
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(*sys.argv[1:])
