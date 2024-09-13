@@ -61,7 +61,7 @@ points.forEach(
 		core.wait(0.01);
 
 		core.setObserverLocation(
-			point.long, 
+			point.lon, 
 			point.lat, 
 			0
 		);

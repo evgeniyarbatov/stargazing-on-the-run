@@ -16,20 +16,27 @@ Create Stellarium scripts:
 make scripts
 ```
 
+Update Stellarium config.ini:
+
+```
+# ~/Library/Application\ Support/Stellarium/config.ini
+[scripts]
+flag_allow_screenshots_dir             = true
+```
+
+Run Stellarium scripts to create screenshots:
+
+```
+/Applications/Stellarium.app/Contents/MacOS/stellarium \
+--startup-script /Users/zhenya/gitRepo/stargazing-on-the-run/stellarium-scripts/osm-upload116302778189861384.ssc
+```
+
 Create images with 1) map of the entire map 2) my current location on the map and 3) direction of where I am looking at:
 
 ```
 python3 \
 scripts/make_maps.py \
 gpx_data/Morning_Run.gpx
-```
-
-Run Stellarium script to create screenshots:
-
-```
-/Applications/Stellarium.app/Contents/MacOS/stellarium \
---startup-script /Users/arbatov/gitRepo/stargazing-on-the-run/tmp/StellariumScript.ssc \
---screenshot-dir /Users/arbatov/gitRepo/stargazing-on-the-run/tmp/sky_images
 ```
 
 Merge Stellarium screenshots and maps into a single image:
