@@ -27,8 +27,7 @@ flag_allow_screenshots_dir             = true
 Run Stellarium scripts to create screenshots:
 
 ```
-/Applications/Stellarium.app/Contents/MacOS/stellarium \
---startup-script /Users/zhenya/gitRepo/stargazing-on-the-run/stellarium-scripts/osm-upload116302778189861384.ssc
+make screenshots
 ```
 
 Create images with 1) map of the entire map 2) my current location on the map and 3) direction of where I am looking at:

@@ -10,6 +10,8 @@ SCREENSHOT_DIR = ~/Downloads/stellarium
 
 TIMEZONE = Asia/Ho_Chi_Minh
 
+STELLARIUM_SCRIPTS := $(wildcard $(STELLARIUM_SCRIPTS_DIR)/*.ssc)
+
 all: venv install jupyter
 
 venv:
@@ -43,4 +45,10 @@ scripts:
 	$(STELLARIUM_SCRIPTS_DIR) \
 	$(SCREENSHOT_DIR)
 
-.PHONY: venv install jupyter gpx scripts
+screenshots:
+	@for file in $(STELLARIUM_SCRIPTS); do \
+		script_path=$$(realpath $$file); \
+		/Applications/Stellarium.app/Contents/MacOS/stellarium --startup-script $$script_path; \
+	done
+
+.PHONY: venv install jupyter gpx scripts screenshots
