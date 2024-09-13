@@ -7,17 +7,16 @@ from utils import GPXData
 
 class StellariumScript:
 	SCRIPT = """
-// Author: Evgeny Arbatov
-// Version: 1.0
-// License: Public Domain
-// Name: GPX to Stellarium images
-// Description: Convert GPX files to Stellarium images
-
 points = [
 $POINTS$
 ];
 
-SolarSystem.setFlagPlanets(true);
+core.clear("natural");
+core.setGuiVisible(false);
+
+StelMovementMgr.moveViewport(-45, -45, 0)
+
+LandscapeMgr.setFlagAtmosphere(false);
 
 SolarSystem.setFlagLabels(true);
 SolarSystem.setLabelsAmount(10);
@@ -31,32 +30,13 @@ SolarSystem.setMinorBodyScale(20);
 SolarSystem.setFlagPlanetScale(true);
 SolarSystem.setPlanetScale(20);
 
-core.clear("natural");
-core.setGuiVisible(false);
-
-StelMovementMgr.zoomTo(180, 1);
-
-GridLinesMgr.setFlagEquatorGrid(false);
-
-LandscapeMgr.setFlagLandscape(false);
-LandscapeMgr.setFlagAtmosphere(true);
-
-ConstellationMgr.setFlagLines(true);
-ConstellationMgr.setFlagLabels(true);
-ConstellationMgr.setFlagArt(true);
-
 StarMgr.setFlagStars(true);
 StarMgr.setFlagLabels(true);
 
 MilkyWay.setFlagShow(true);
-MilkyWay.setIntensity(5);
-
-SporadicMeteorMgr.setFlagShow(true);
-
-NebulaMgr.setFlagShow(true);
 
 points.forEach(
-	function(point) {
+	function(point) { 
 		core.moveToAltAzi(0, point.az)
 		core.wait(0.01);
 
@@ -67,8 +47,6 @@ points.forEach(
 		);
 
 		core.setDate(point.date, "local");
-
-		core.setTimeRate(0);
 		core.wait(1);
 
 		core.screenshot(
