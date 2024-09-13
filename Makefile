@@ -9,7 +9,9 @@ STELLARIUM_SCRIPTS_DIR = stellarium-scripts
 
 SCREENSHOT_DIR = ~/Downloads/stellarium
 MAPS_DIR = ~/Downloads/stellarium-maps
+
 MERGED_DIR = ~/Downloads/stellarium-with-maps
+VIDEO_DIRS := $(wildcard $(MERGED_DIR)/*)
 
 TIMEZONE = Asia/Ho_Chi_Minh
 
@@ -69,4 +71,16 @@ merge:
 	$(MAPS_DIR) \
 	$(MERGED_DIR)
 
-.PHONY: venv install jupyter gpx scripts screenshots maps merge
+videos: $(VIDEO_DIRS)
+
+$(VIDEO_DIRS):
+	@cd $@ && \
+	echo "Processing $@..." && \
+	ffmpeg \
+	-framerate 5 \
+	-pattern_type glob -i '*.png' \
+	-c:v libx264 \
+	-pix_fmt yuv420p \
+	video.mp4
+
+.PHONY: venv install jupyter gpx scripts screenshots maps merge videos
