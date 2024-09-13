@@ -35,6 +35,11 @@ def main(
 				im1 = Image.open(s)
 				im2 = Image.open(m)
 
+				max_height = im1.height * 0.25
+				if im2.height > max_height:
+					scale = max_height / im2.height
+					im2 = im2.resize((int(im2.width * scale), int(im2.height * scale)))
+
 				position = ((im1.width - im2.width), (im1.height - im2.height))
 				im1.paste(
 					im2, 

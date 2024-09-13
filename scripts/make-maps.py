@@ -38,8 +38,7 @@ def plot_run(
 		compass_data = get_compass_data(point['az'])
 
 		fig = plt.figure(
-      		figsize=(8, 4), 
-        	facecolor='none',
+      		figsize=(8, 4),
 			dpi=300,
         )
 		gs = GridSpec(nrows=1, ncols=2, width_ratios=[1, 1])
@@ -63,7 +62,6 @@ def plot_run(
 		fig.tight_layout()
 		fig.savefig(
       		f'{maps_dir}/{point['timestamp']}.png',
-        	transparent=True,
          ) 
 		plt.close(fig) 
 

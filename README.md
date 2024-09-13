@@ -39,8 +39,7 @@ make maps
 Merge Stellarium screenshots and maps into a single image:
 
 ```
-python3 \
-scripts/merge_images.py
+make merge
 ```
 
 Create video
